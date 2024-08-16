@@ -284,4 +284,6 @@ app.put("/update-note-pinned/:noteId", authenticateToken, async (req, res) => {
 app.get("/", (req, res) => {
   res.json({ hello: "kanchan" });
 });
-app.listen(8000);
+
+const PORT = process.env.PORT || 8000
+app.listen(PORT);
