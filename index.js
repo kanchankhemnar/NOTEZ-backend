@@ -267,7 +267,7 @@ app.put("/update-note-pinned/:noteId", authenticateToken, async (req, res) => {
       return res.status(404).json({ error: true, message: "Todo not found" });
     }
 
-    note.isPinned = isPinned || false;
+    note.isPinned = !note.isPinned;
 
     await note.save();
 
@@ -281,9 +281,37 @@ app.put("/update-note-pinned/:noteId", authenticateToken, async (req, res) => {
   }
 });
 
-app.get("/", (req, res) => {
-  res.json({ hello: "kanchan" });
+//Search Notes
+app.get("/search-notes", authenticateToken, async (req, res) => {
+  const { user } = req.user;
+  const { query } = req.query;
+  if (!query) {
+    return res
+      .status(400)
+      .json({ error: true, message: "Search query is required" });
+  }
+
+  try {
+    const matchingNotes = await Note.find({
+      userId: user._id,
+      $or: [
+        { title: { $regex: new RegExp(query, "i") } },
+        { content: { $regex: new RegExp(query, "i") } },
+      ],
+    });
+    return res.json({
+      error: false,
+      notes: matchingNotes,
+      message: "matching notes found",
+    });
+  } catch (error) {
+    return res.status(500).json({ error: true, message: "Server error" });
+  }
 });
 
-const PORT = process.env.PORT || 8000
+app.get("/", (req, res) => {
+  res.json({ hello: "user" });
+});
+
+const PORT = process.env.PORT || 8000;
 app.listen(PORT);
