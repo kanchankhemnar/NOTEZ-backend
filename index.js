@@ -3,10 +3,9 @@ const express = require("express");
 const app = express();
 const cors = require("cors");
 const bcrypt = require("bcrypt");
-const config = require("./config.json");
 const mongoose = require("mongoose");
 
-mongoose.connect(config.connectionString);
+mongoose.connect(process.env.MONGODB_URL);
 
 const User = require("./models/user.model");
 const Note = require("./models/note.model");
@@ -314,4 +313,6 @@ app.get("/", (req, res) => {
 });
 
 const PORT = process.env.PORT || 8000;
-app.listen(PORT);
+app.listen(PORT, () => {
+  console.log("server running smoothly");
+});
