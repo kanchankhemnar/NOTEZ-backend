@@ -314,5 +314,5 @@ app.get("/", (req, res) => {
 
 const PORT = process.env.PORT || 8000;
 app.listen(PORT, () => {
-  console.log("server running smoothly");
+  console.log(`server running smoothly on PORT`,PORT);
 });
