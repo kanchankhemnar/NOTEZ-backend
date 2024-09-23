@@ -145,7 +145,7 @@ app.post("/add-note", authenticateToken, async (req, res) => {
     return res.json({
       error: false,
       note,
-      message: "Todo added successfully",
+      message: "Note added successfully",
     });
   } catch (err) {
     return res.json({
@@ -174,7 +174,7 @@ app.put("/edit-note/:noteId", authenticateToken, async (req, res) => {
 
     // If the note does not exist, return a 404 error
     if (!note) {
-      return res.status(404).json({ error: true, message: "Todo not found" });
+      return res.status(404).json({ error: true, message: "Note not found" });
     }
 
     // Update note fields if they are provided
@@ -193,7 +193,7 @@ app.put("/edit-note/:noteId", authenticateToken, async (req, res) => {
     return res.json({
       error: false,
       note,
-      message: "Todo updated successfully",
+      message: "Note updated successfully",
     });
   } catch (error) {
     // Handle server error
@@ -214,7 +214,7 @@ app.get("/get-all-notes", authenticateToken, async (req, res) => {
       error: false,
       notes,
 
-      message: "All todos retrived successfully",
+      message: "All notes retrived successfully",
     });
   } catch (error) {
     return res.status(500).json({
@@ -237,13 +237,13 @@ app.delete("/delete-note/:noteId", authenticateToken, async (req, res) => {
     if (!note) {
       return res.json({
         error: true,
-        message: "Todo not found",
+        message: "Note not found",
       });
     }
     await Note.deleteOne({ _id: noteId, userId: user._id });
     return res.json({
       error: true,
-      message: "Todo deleted",
+      message: "Note deleted",
     });
   } catch (error) {
     return res.status(500).json({
@@ -263,7 +263,7 @@ app.put("/update-note-pinned/:noteId", authenticateToken, async (req, res) => {
     const note = await Note.findOne({ _id: noteId, userId: user._id });
 
     if (!note) {
-      return res.status(404).json({ error: true, message: "Todo not found" });
+      return res.status(404).json({ error: true, message: "Note not found" });
     }
 
     note.isPinned = !note.isPinned;
@@ -273,7 +273,7 @@ app.put("/update-note-pinned/:noteId", authenticateToken, async (req, res) => {
     return res.json({
       error: false,
       note,
-      message: "Todo updated successfully",
+      message: "Note updated successfully",
     });
   } catch (error) {
     return res.status(500).json({ error: true, message: "Server error" });
